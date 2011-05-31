@@ -13,21 +13,35 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Synapse.Input;
 
-namespace Synapse.Tests.Input
+namespace Synapse.Results
 {
-    [TestClass]
-    public class TextReaderInputTests : InputTestsBase
+    public interface IParseResult<out TToken, out TResult>
     {
-        protected override IInput<char> CreateInputFrom(IEnumerable<char> source)
+        IInput<TToken> FirstInput { get; }
+        IInput<TToken> RemainingInput { get; }
+    }
+
+    public static class ParseResult
+    {
+        public static IParseResult<TToken, TResult> Success<TToken, TResult>(IInput<TToken> firstInput,
+                                                                             IInput<TToken> remainingInput,
+                                                                             TResult result)
         {
-            var stringReader = new StringReader(string.Join("", source));
-            return stringReader.AsInput();
+            return new SuccessfulParseResult<TToken, TResult>(firstInput, remainingInput, result);
+        }
+
+        public static IParseResult<TToken, TToken> UnexpectedTokenFailure<TToken>(IInput<TToken> input,
+                                                                                  params TToken[] expectedTokens)
+        {
+            return new FailureParseResult<TToken, TToken>(input, input);
+        }
+
+        public static IParseResult<TToken, TToken> UnexpectedEndOfInput<TToken>(IInput<TToken> input,
+                                                                                params TToken[] expectedTokens)
+        {
+            return new FailureParseResult<TToken, TToken>(input, input);
         }
     }
 }

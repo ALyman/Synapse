@@ -48,6 +48,8 @@
     <Compile Include="Input\EnumeratorInputTests.cs" />
     <Compile Include="Input\InputTestsBase.cs" />
     <Compile Include="Input\TextReaderInputTests.cs" />
+    <Compile Include="ParseResultAssert.cs" />
+    <Compile Include="Parsers\TokenMatchParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

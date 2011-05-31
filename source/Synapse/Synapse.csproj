@@ -43,7 +43,14 @@
     <Compile Include="Input\IInput.cs" />
     <Compile Include="Input\EnumeratorInput.cs" />
     <Compile Include="Inputs.cs" />
+    <Compile Include="Parsers\IParser.cs" />
+    <Compile Include="Results\FailureParseResult.cs" />
+    <Compile Include="Results\IFailureParseResult.cs" />
+    <Compile Include="Results\IParseResult.cs" />
+    <Compile Include="Parsers\TokenMatchParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Results\ISuccessfulParseResult.cs" />
+    <Compile Include="Results\SuccessfulParseResult.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

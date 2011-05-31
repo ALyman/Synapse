@@ -24,19 +24,19 @@ namespace Synapse.Tests
     [TestClass]
     public abstract class InputTestsBase
     {
-        protected abstract IInput<char> CreateFrom(IEnumerable<char> source);
+        protected abstract IInput<char> CreateInputFrom(IEnumerable<char> source);
 
         [TestMethod]
         public void When_I_have_an_empty_source_I_start_and_the_end_of_input()
         {
-            var input = CreateFrom(new char[] {});
+            var input = CreateInputFrom(new char[] {});
             Assert.IsTrue(input.EndOfInput);
         }
 
         [TestMethod]
         public void When_I_read_the_only_token_I_recieve_it()
         {
-            var input = CreateFrom(new[] {'a'});
+            var input = CreateInputFrom(new[] {'a'});
             Assert.AreEqual('a', input.Current);
             input = input.MoveNext();
             Assert.IsTrue(input.EndOfInput);
@@ -45,7 +45,7 @@ namespace Synapse.Tests
         [TestMethod]
         public void When_I_read_the_last_token_I_no_longer_move_forward()
         {
-            var input = CreateFrom(new[] {'a', 'b'});
+            var input = CreateInputFrom(new[] {'a', 'b'});
             Assert.AreEqual('a', input.Current);
             input = input.MoveNext();
             Assert.IsFalse(input.EndOfInput);
@@ -59,7 +59,7 @@ namespace Synapse.Tests
         [TestMethod]
         public void When_I_try_to_get_the_current_token_at_the_end_of_input_it_throws()
         {
-            var input = CreateFrom(new char[] { });
+            var input = CreateInputFrom(new char[] {});
             Assert.IsTrue(input.EndOfInput);
 
             try
@@ -67,7 +67,9 @@ namespace Synapse.Tests
                 var value = input.Current;
                 Assert.Fail("Retrieving the current token did not throw the expected exception");
             }
-            catch (EndOfStreamException) { }
+            catch (EndOfStreamException)
+            {
+            }
         }
     }
 }

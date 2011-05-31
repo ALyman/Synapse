@@ -13,21 +13,31 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Synapse.Input;
+using Synapse.Results;
 
-namespace Synapse.Tests.Input
+namespace Synapse.Tests
 {
-    [TestClass]
-    public class TextReaderInputTests : InputTestsBase
+    public static class ParseResultAssert
     {
-        protected override IInput<char> CreateInputFrom(IEnumerable<char> source)
+        public static void IsSuccess<TToken, TResult>(IParseResult<TToken, TResult> result)
         {
-            var stringReader = new StringReader(string.Join("", source));
-            return stringReader.AsInput();
+            if (!(result is ISuccessfulParseResult<TToken, TResult>))
+                throw new AssertFailedException("ParseResultAssert.IsSuccess failed: ParseResult was not a success");
+        }
+
+        public static void IsFailure<TToken, TResult>(IParseResult<TToken, TResult> result)
+        {
+            if (!(result is IFailureParseResult<TToken, TResult>))
+                throw new AssertFailedException("ParseResultAssert.IsFailure failed: ParseResult was not a failure");
+        }
+
+        public static void AreEqual<TToken, TResult>(TResult expected, IParseResult<TToken, TResult> result)
+        {
+            var successfulParseResult = result as ISuccessfulParseResult<TToken, TResult>;
+            if (successfulParseResult == null)
+                throw new AssertFailedException("ParseResultAssert.AreEqual failed: ParseResult was not a success");
+            Assert.AreEqual(expected, successfulParseResult.Result);
         }
     }
 }

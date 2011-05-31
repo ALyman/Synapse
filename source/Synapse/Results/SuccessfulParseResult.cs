@@ -13,21 +13,25 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Synapse.Input;
 
-namespace Synapse.Tests.Input
+namespace Synapse.Results
 {
-    [TestClass]
-    public class TextReaderInputTests : InputTestsBase
+    internal class SuccessfulParseResult<TToken, TResult> : ISuccessfulParseResult<TToken, TResult>
     {
-        protected override IInput<char> CreateInputFrom(IEnumerable<char> source)
+        public SuccessfulParseResult(IInput<TToken> firstInput, IInput<TToken> remainingInput, TResult result)
         {
-            var stringReader = new StringReader(string.Join("", source));
-            return stringReader.AsInput();
+            FirstInput = firstInput;
+            RemainingInput = remainingInput;
+            Result = result;
         }
+
+        #region ISuccessfulParseResult<TToken,TResult> Members
+
+        public IInput<TToken> FirstInput { get; private set; }
+        public IInput<TToken> RemainingInput { get; private set; }
+        public TResult Result { get; private set; }
+
+        #endregion
     }
 }

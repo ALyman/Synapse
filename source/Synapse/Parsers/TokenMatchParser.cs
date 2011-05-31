@@ -14,20 +14,39 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Synapse.Input;
+using Synapse.Results;
 
-namespace Synapse.Tests.Input
+namespace Synapse.Parsers
 {
-    [TestClass]
-    public class TextReaderInputTests : InputTestsBase
+    public class TokenMatchParser<TToken> : IParser<TToken, TToken>
     {
-        protected override IInput<char> CreateInputFrom(IEnumerable<char> source)
+        private readonly IEqualityComparer<TToken> comparer;
+        private readonly TToken token;
+
+        public TokenMatchParser(TToken token) : this(token, EqualityComparer<TToken>.Default)
         {
-            var stringReader = new StringReader(string.Join("", source));
-            return stringReader.AsInput();
         }
+
+        public TokenMatchParser(TToken token, IEqualityComparer<TToken> comparer)
+        {
+            this.token = token;
+            this.comparer = comparer;
+        }
+
+        #region IParser<TToken,TToken> Members
+
+        public IParseResult<TToken, TToken> Parse(IInput<TToken> input)
+        {
+            if (input.EndOfInput)
+                return ParseResult.UnexpectedEndOfInput(input, this.token);
+            else if (this.comparer.Equals(input.Current, this.token))
+                return ParseResult.Success(input, input.MoveNext(), input.Current);
+            else
+                return ParseResult.UnexpectedTokenFailure(input, this.token);
+        }
+
+        #endregion
     }
 }

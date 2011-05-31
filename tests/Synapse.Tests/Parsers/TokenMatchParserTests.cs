@@ -13,21 +13,41 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Synapse.Input;
+using Synapse.Parsers;
 
-namespace Synapse.Tests.Input
+namespace Synapse.Tests.Parsers
 {
     [TestClass]
-    public class TextReaderInputTests : InputTestsBase
+    public class TokenMatchParserTests
     {
-        protected override IInput<char> CreateInputFrom(IEnumerable<char> source)
+        [TestMethod]
+        public void When_the_token_matches()
         {
-            var stringReader = new StringReader(string.Join("", source));
-            return stringReader.AsInput();
+            var input = new[] {1}.AsInput();
+            var parser = new TokenMatchParser<int>(1);
+            var result = parser.Parse(input);
+            ParseResultAssert.IsSuccess(result);
+            ParseResultAssert.AreEqual(1, result);
+        }
+
+        [TestMethod]
+        public void When_the_token_doesnt_match()
+        {
+            var input = new[] {1}.AsInput();
+            var parser = new TokenMatchParser<int>(2);
+            var result = parser.Parse(input);
+            ParseResultAssert.IsFailure(result);
+        }
+
+        [TestMethod]
+        public void When_at_the_end_of_input()
+        {
+            var input = new int[0].AsInput();
+            var parser = new TokenMatchParser<int>(1);
+            var result = parser.Parse(input);
+            ParseResultAssert.IsFailure(result);
         }
     }
 }
