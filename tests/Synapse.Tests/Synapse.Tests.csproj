@@ -48,6 +48,9 @@
     <Compile Include="Input\EnumeratorInputTests.cs" />
     <Compile Include="Input\InputTestsBase.cs" />
     <Compile Include="Input\TextReaderInputTests.cs" />
+    <Compile Include="Fluent\FluentParsingTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ParseResultAssert.cs" />
     <Compile Include="Parsers\AlternativeParserTests.cs" />
     <Compile Include="Parsers\ConcatenationParserTests.cs" />
