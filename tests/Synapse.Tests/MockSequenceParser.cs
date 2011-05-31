@@ -13,33 +13,28 @@
 #endregion
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
+using Synapse.Input;
+using Synapse.Parsers;
 using Synapse.Results;
 
 namespace Synapse.Tests
 {
-    public static class ParseResultAssert
+    public class MockSequenceParser<TToken, TResult> : Queue<IParseResult<TToken, TResult>>, IParser<TToken, TResult>
     {
-        public static TResult IsSuccess<TToken, TResult>(IParseResult<TToken, TResult> result)
+        #region IParser<TToken,TResult> Members
+
+        public IParseResult<TToken, TResult> Parse(IInput<TToken> input)
         {
-            var successResult = result as ISuccessfulParseResult<TToken, TResult>;
-            if (successResult == null)
-                throw new AssertFailedException("ParseResultAssert.IsSuccess failed: ParseResult was not a success");
-            return successResult.Result;
+            return Dequeue();
         }
 
-        public static void IsFailure<TToken, TResult>(IParseResult<TToken, TResult> result)
-        {
-            if (!(result is IFailureParseResult<TToken, TResult>))
-                throw new AssertFailedException("ParseResultAssert.IsFailure failed: ParseResult was not a failure");
-        }
+        #endregion
 
-        public static void AreEqual<TToken, TResult>(TResult expected, IParseResult<TToken, TResult> result)
+        public void Add(IParseResult<TToken, TResult> result)
         {
-            var successfulParseResult = result as ISuccessfulParseResult<TToken, TResult>;
-            if (successfulParseResult == null)
-                throw new AssertFailedException("ParseResultAssert.AreEqual failed: ParseResult was not a success");
-            Assert.AreEqual(expected, successfulParseResult.Result);
+            Enqueue(result);
         }
     }
 }

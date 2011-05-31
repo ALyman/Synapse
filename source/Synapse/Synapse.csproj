@@ -47,6 +47,7 @@
     <Compile Include="Parsers\ConcatenationParser.cs" />
     <Compile Include="Parsers\IParser.cs" />
     <Compile Include="Parsers\ProjectionParser.cs" />
+    <Compile Include="Parsers\RepetitionParser.cs" />
     <Compile Include="Results\FailureParseResult.cs" />
     <Compile Include="Results\IFailureParseResult.cs" />
     <Compile Include="Results\IParseResult.cs" />
