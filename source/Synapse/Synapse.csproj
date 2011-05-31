@@ -43,6 +43,7 @@
     <Compile Include="Input\IInput.cs" />
     <Compile Include="Input\EnumeratorInput.cs" />
     <Compile Include="Inputs.cs" />
+    <Compile Include="Parsers\ConcatenationParser.cs" />
     <Compile Include="Parsers\IParser.cs" />
     <Compile Include="Results\FailureParseResult.cs" />
     <Compile Include="Results\IFailureParseResult.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\ISuccessfulParseResult.cs" />
     <Compile Include="Results\SuccessfulParseResult.cs" />
+    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

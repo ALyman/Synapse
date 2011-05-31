@@ -13,19 +13,26 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Synapse.Input;
+using Synapse.Results;
 
-namespace Synapse.Tests.Input
+namespace Synapse.Tests.Results
 {
-    [TestClass]
-    public class EnumeratorInputTests : InputTestsBase
+    internal class MockParseResult<TToken, TResult> : IParseResult<TToken, TResult>
     {
-        protected override IInput<char> CreateInputFrom(IEnumerable<char> source)
+        #region IParseResult<TToken,TResult> Members
+
+        public IInput<TToken> FirstInput
         {
-            return source.AsInput();
+            get { throw new NotImplementedException(); }
         }
+
+        public IInput<TToken> RemainingInput
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        #endregion
     }
 }

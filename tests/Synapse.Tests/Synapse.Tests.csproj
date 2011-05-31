@@ -49,8 +49,14 @@
     <Compile Include="Input\InputTestsBase.cs" />
     <Compile Include="Input\TextReaderInputTests.cs" />
     <Compile Include="ParseResultAssert.cs" />
+    <Compile Include="Parsers\ConcatenationParserTests.cs" />
+    <Compile Include="MockInput.cs" />
+    <Compile Include="MockFailureParser.cs" />
+    <Compile Include="MockSuccessfulParser.cs" />
     <Compile Include="Parsers\TokenMatchParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MockParseResult.cs" />
+    <Compile Include="Results\ParseResultTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\source\Synapse\Synapse.csproj">

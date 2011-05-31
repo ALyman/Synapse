@@ -13,19 +13,28 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Synapse.Input;
+using Synapse.Parsers;
+using Synapse.Results;
 
-namespace Synapse.Tests.Input
+namespace Synapse.Tests
 {
-    [TestClass]
-    public class EnumeratorInputTests : InputTestsBase
+    public class MockSuccessfulParser<TToken, TResult> : IParser<TToken, TResult>
     {
-        protected override IInput<char> CreateInputFrom(IEnumerable<char> source)
+        private readonly TResult result;
+
+        public MockSuccessfulParser(TResult result)
         {
-            return source.AsInput();
+            this.result = result;
         }
+
+        #region IParser<TToken,TResult> Members
+
+        public IParseResult<TToken, TResult> Parse(IInput<TToken> input)
+        {
+            return ParseResult.Success(input, input, this.result);
+        }
+
+        #endregion
     }
 }

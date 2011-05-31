@@ -13,19 +13,30 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Synapse.Input;
 
-namespace Synapse.Tests.Input
+namespace Synapse.Tests
 {
-    [TestClass]
-    public class EnumeratorInputTests : InputTestsBase
+    public class MockInput<T> : IInput<T>
     {
-        protected override IInput<char> CreateInputFrom(IEnumerable<char> source)
+        #region IInput<T> Members
+
+        public T Current
         {
-            return source.AsInput();
+            get { throw new NotImplementedException(); }
         }
+
+        public bool EndOfInput
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public IInput<T> MoveNext()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

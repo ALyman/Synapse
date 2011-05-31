@@ -32,6 +32,12 @@ namespace Synapse.Results
             return new SuccessfulParseResult<TToken, TResult>(firstInput, remainingInput, result);
         }
 
+        public static IParseResult<TToken, TResult> Failure<TToken, TResult>(IInput<TToken> firstInput,
+                                                                             IInput<TToken> remainingInput)
+        {
+            return new FailureParseResult<TToken, TResult>(firstInput, remainingInput);
+        }
+
         public static IParseResult<TToken, TToken> UnexpectedTokenFailure<TToken>(IInput<TToken> input,
                                                                                   params TToken[] expectedTokens)
         {
@@ -42,6 +48,44 @@ namespace Synapse.Results
                                                                                 params TToken[] expectedTokens)
         {
             return new FailureParseResult<TToken, TToken>(input, input);
+        }
+
+        public static IParseResult<TToken, TResult> Cast<TToken, TOriginal, TResult>(
+            this IParseResult<TToken, TOriginal> source)
+        {
+            var successfulResult = source as ISuccessfulParseResult<TToken, TOriginal>;
+            var failureResult = source as IFailureParseResult<TToken, TOriginal>;
+            if (successfulResult != null)
+                return Success(
+                    successfulResult.FirstInput,
+                    successfulResult.RemainingInput,
+                    Utilities.DynamicCast<TOriginal, TResult>(successfulResult.Result));
+            else
+                return new FailureParseResult<TToken, TResult>(
+                    failureResult.FirstInput,
+                    failureResult.RemainingInput);
+        }
+
+        public static IParseResult<TToken, TResult> IfSuccess<TToken, TOriginal, TResult>(
+            this IParseResult<TToken, TOriginal> source,
+            Func<ISuccessfulParseResult<TToken, TOriginal>, IParseResult<TToken, TResult>> action)
+        {
+            var successfulResult = source as ISuccessfulParseResult<TToken, TOriginal>;
+            if (successfulResult != null)
+                return action(successfulResult);
+            else
+                return source.Cast<TToken, TOriginal, TResult>();
+        }
+
+        public static IParseResult<TToken, TResult> IfFailure<TToken, TOriginal, TResult>(
+            this IParseResult<TToken, TOriginal> source,
+            Func<IFailureParseResult<TToken, TOriginal>, IParseResult<TToken, TResult>> action)
+        {
+            var failureResult = source as IFailureParseResult<TToken, TOriginal>;
+            if (failureResult != null)
+                return action(failureResult);
+            else
+                return source.Cast<TToken, TOriginal, TResult>();
         }
     }
 }

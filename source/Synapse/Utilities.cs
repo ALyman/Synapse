@@ -13,19 +13,20 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Synapse.Input;
+using System.Linq.Expressions;
 
-namespace Synapse.Tests.Input
+namespace Synapse
 {
-    [TestClass]
-    public class EnumeratorInputTests : InputTestsBase
+    internal class Utilities
     {
-        protected override IInput<char> CreateInputFrom(IEnumerable<char> source)
+        public static TResult DynamicCast<TSource, TResult>(TSource source)
         {
-            return source.AsInput();
+            return Expression.Lambda<Func<TResult>>(
+                Expression.Convert(
+                    Expression.Constant(source),
+                    typeof (TResult)
+                    )
+                ).Compile().Invoke();
         }
     }
 }
