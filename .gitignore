@@ -31,5 +31,7 @@ _ReSharper*/
 NDependOut
 StyleCop.Cache
 *.vs10x
-
 *.docstates
+/build/Debug/
+/build/Release/
+/build/Official/
