@@ -19,10 +19,10 @@ namespace Synapse.Results
 {
     internal class FailureParseResult<TToken, TResult> : IFailureParseResult<TToken, TResult>
     {
-        public FailureParseResult(IInput<TToken> firstInput, IInput<TToken> remainingInput)
+        public FailureParseResult(IInput<TToken> firstInput)
         {
             FirstInput = firstInput;
-            RemainingInput = remainingInput;
+            RemainingInput = firstInput;
         }
 
         #region IFailureParseResult<TToken,TResult> Members

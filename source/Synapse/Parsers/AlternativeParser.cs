@@ -13,19 +13,39 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Synapse.Input;
-using Synapse.Parsers;
 using Synapse.Results;
 
-namespace Synapse.Tests
+namespace Synapse.Parsers
 {
-    public class MockFailureParser<TToken, TResult> : IParser<TToken, TResult>
+    public class AlternativeParser<TToken, TResult> : IParser<TToken, TResult>
     {
+        private readonly IParser<TToken, TResult>[] alternatives;
+
+        public AlternativeParser(params IParser<TToken, TResult>[] alternatives)
+        {
+            this.alternatives = alternatives;
+        }
+
         #region IParser<TToken,TResult> Members
 
         public IParseResult<TToken, TResult> Parse(IInput<TToken> input)
         {
-            return ParseResult.Failure<TToken, TResult>(input);
+            var failures = new List<IFailureParseResult<TToken, TResult>>();
+
+            foreach (var alternative in this.alternatives)
+            {
+                var result = alternative.Parse(input);
+                var successfulResult = result as ISuccessfulParseResult<TToken, TResult>;
+                if (successfulResult != null)
+                    return successfulResult;
+                else
+                    failures.Add((IFailureParseResult<TToken, TResult>) result);
+            }
+
+            return ParseResult.CombinedFailure(failures);
         }
 
         #endregion

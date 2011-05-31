@@ -13,6 +13,8 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Synapse.Input;
 
 namespace Synapse.Results
@@ -25,29 +27,34 @@ namespace Synapse.Results
 
     public static class ParseResult
     {
-        public static IParseResult<TToken, TResult> Success<TToken, TResult>(IInput<TToken> firstInput,
-                                                                             IInput<TToken> remainingInput,
-                                                                             TResult result)
+        public static ISuccessfulParseResult<TToken, TResult> Success<TToken, TResult>(IInput<TToken> firstInput,
+                                                                                       IInput<TToken> remainingInput,
+                                                                                       TResult result)
         {
             return new SuccessfulParseResult<TToken, TResult>(firstInput, remainingInput, result);
         }
 
-        public static IParseResult<TToken, TResult> Failure<TToken, TResult>(IInput<TToken> firstInput,
-                                                                             IInput<TToken> remainingInput)
+        public static IFailureParseResult<TToken, TResult> Failure<TToken, TResult>(IInput<TToken> input)
         {
-            return new FailureParseResult<TToken, TResult>(firstInput, remainingInput);
+            return new FailureParseResult<TToken, TResult>(input);
         }
 
-        public static IParseResult<TToken, TToken> UnexpectedTokenFailure<TToken>(IInput<TToken> input,
-                                                                                  params TToken[] expectedTokens)
+        public static IFailureParseResult<TToken, TToken> UnexpectedTokenFailure<TToken>(IInput<TToken> input,
+                                                                                         params TToken[] expectedTokens)
         {
-            return new FailureParseResult<TToken, TToken>(input, input);
+            return new FailureParseResult<TToken, TToken>(input);
         }
 
-        public static IParseResult<TToken, TToken> UnexpectedEndOfInput<TToken>(IInput<TToken> input,
-                                                                                params TToken[] expectedTokens)
+        public static IFailureParseResult<TToken, TToken> UnexpectedEndOfInput<TToken>(IInput<TToken> input,
+                                                                                       params TToken[] expectedTokens)
         {
-            return new FailureParseResult<TToken, TToken>(input, input);
+            return new FailureParseResult<TToken, TToken>(input);
+        }
+
+        public static IFailureParseResult<TToken, TResult> CombinedFailure<TToken, TResult>(
+            IEnumerable<IFailureParseResult<TToken, TResult>> failures)
+        {
+            return new FailureParseResult<TToken, TResult>(failures.First().FirstInput);
         }
 
         public static IParseResult<TToken, TResult> Cast<TToken, TOriginal, TResult>(
@@ -61,9 +68,7 @@ namespace Synapse.Results
                     successfulResult.RemainingInput,
                     Utilities.DynamicCast<TOriginal, TResult>(successfulResult.Result));
             else
-                return new FailureParseResult<TToken, TResult>(
-                    failureResult.FirstInput,
-                    failureResult.RemainingInput);
+                return Failure<TToken, TResult>(failureResult.FirstInput);
         }
 
         public static IParseResult<TToken, TResult> IfSuccess<TToken, TOriginal, TResult>(

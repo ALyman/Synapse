@@ -43,6 +43,7 @@
     <Compile Include="Input\IInput.cs" />
     <Compile Include="Input\EnumeratorInput.cs" />
     <Compile Include="Inputs.cs" />
+    <Compile Include="Parsers\AlternativeParser.cs" />
     <Compile Include="Parsers\ConcatenationParser.cs" />
     <Compile Include="Parsers\IParser.cs" />
     <Compile Include="Results\FailureParseResult.cs" />
