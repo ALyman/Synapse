@@ -54,6 +54,7 @@
     <Compile Include="MockInput.cs" />
     <Compile Include="MockFailureParser.cs" />
     <Compile Include="MockSuccessfulParser.cs" />
+    <Compile Include="Parsers\ProjectionParserTests.cs" />
     <Compile Include="Parsers\TokenMatchParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MockParseResult.cs" />
