@@ -45,6 +45,7 @@
     <Compile Include="Inputs.cs" />
     <Compile Include="Parsers\AlternativeParser.cs" />
     <Compile Include="Parsers\ConcatenationParser.cs" />
+    <Compile Include="Parsers\EndOfInputParser.cs" />
     <Compile Include="Parsers\IParser.cs" />
     <Compile Include="Parsers\ProjectionParser.cs" />
     <Compile Include="Parsers\RepetitionParser.cs" />
