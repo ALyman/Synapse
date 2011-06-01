@@ -19,8 +19,18 @@ using Synapse.Results;
 
 namespace Synapse.Parsers
 {
+    /// <summary>
+    /// A generic parser that reads a token stream, and returns a result.
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
     public interface IParser<TToken, out TResult>
     {
+        /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>A <see cref="IParseResult{TToken,TResult}"/> containing the result of the parsing.</returns>
         IParseResult<TToken, TResult> Parse(IInput<TToken> input);
     }
 }

@@ -20,15 +20,28 @@ using Synapse.Results;
 
 namespace Synapse.Parsers
 {
+    /// <summary>
+    /// A parser that matches the input to a given token.
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
     public class TokenMatchParser<TToken> : IParser<TToken, TToken>
     {
         private readonly IEqualityComparer<TToken> comparer;
         private readonly TToken token;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TokenMatchParser&lt;TToken&gt;"/> class.
+        /// </summary>
+        /// <param name="token">The token.</param>
         public TokenMatchParser(TToken token) : this(token, EqualityComparer<TToken>.Default)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TokenMatchParser&lt;TToken&gt;"/> class.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="comparer">The comparer.</param>
         public TokenMatchParser(TToken token, IEqualityComparer<TToken> comparer)
         {
             this.token = token;
@@ -37,6 +50,11 @@ namespace Synapse.Parsers
 
         #region IParser<TToken,TToken> Members
 
+        /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>A <see cref="IParseResult{TToken,TResult}"/> containing the result of the parsing.</returns>
         public IParseResult<TToken, TToken> Parse(IInput<TToken> input)
         {
             if (input.EndOfInput)

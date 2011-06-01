@@ -20,10 +20,19 @@ using Synapse.Results;
 
 namespace Synapse.Parsers
 {
+    /// <summary>
+    /// A parser that matches any of a number of other parsers.
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
     public class AlternativeParser<TToken, TResult> : IParser<TToken, TResult>
     {
         private readonly IParser<TToken, TResult>[] alternatives;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AlternativeParser&lt;TToken, TResult&gt;"/> class.
+        /// </summary>
+        /// <param name="alternatives">The alternatives.</param>
         public AlternativeParser(params IParser<TToken, TResult>[] alternatives)
         {
             this.alternatives = alternatives;
@@ -31,6 +40,11 @@ namespace Synapse.Parsers
 
         #region IParser<TToken,TResult> Members
 
+        /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>A <see cref="IParseResult{TToken,TResult}"/> containing the result of the parsing.</returns>
         public IParseResult<TToken, TResult> Parse(IInput<TToken> input)
         {
             var failures = new List<IFailureParseResult<TToken, TResult>>();

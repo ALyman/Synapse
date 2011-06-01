@@ -19,14 +19,38 @@ using Synapse.Input;
 
 namespace Synapse.Results
 {
+    /// <summary>
+    /// A generic parse result, see <see cref="ISuccessfulParseResult{TToken,TResult}" /> and <see cref="IFailureParseResult{TToken,TResult}" />
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
     public interface IParseResult<out TToken, out TResult>
     {
+        /// <summary>
+        /// Gets the first input that was read by the parse.
+        /// </summary>
         IInput<TToken> FirstInput { get; }
+
+        /// <summary>
+        /// Gets the remaining input that was left after the parse.
+        /// </summary>
         IInput<TToken> RemainingInput { get; }
     }
 
+    /// <summary>
+    /// Provides utility methods for <see cref="IParseResult{TToken,TResult}" />
+    /// </summary>
     public static class ParseResult
     {
+        /// <summary>
+        /// Creates a successful result with the given value.
+        /// </summary>
+        /// <typeparam name="TToken">The type of the token.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="firstInput">The first input.</param>
+        /// <param name="remainingInput">The remaining input.</param>
+        /// <param name="result">The result.</param>
+        /// <returns>The result.</returns>
         public static ISuccessfulParseResult<TToken, TResult> Success<TToken, TResult>(IInput<TToken> firstInput,
                                                                                        IInput<TToken> remainingInput,
                                                                                        TResult result)
@@ -34,43 +58,88 @@ namespace Synapse.Results
             return new SuccessfulParseResult<TToken, TResult>(firstInput, remainingInput, result);
         }
 
+        /// <summary>
+        /// Creates a generic failure result.
+        /// </summary>
+        /// <typeparam name="TToken">The type of the token.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="input">The input.</param>
+        /// <returns>The result.</returns>
         public static IFailureParseResult<TToken, TResult> Failure<TToken, TResult>(IInput<TToken> input)
         {
             return new FailureParseResult<TToken, TResult>(input);
         }
 
+        /// <summary>
+        /// Creates a failure result representing an unexpected token found on the input.
+        /// </summary>
+        /// <typeparam name="TToken">The type of the token.</typeparam>
+        /// <param name="input">The input.</param>
+        /// <param name="expectedTokens">The expected tokens.</param>
+        /// <returns>The failure result.</returns>
         public static IFailureParseResult<TToken, TToken> UnexpectedTokenFailure<TToken>(IInput<TToken> input,
                                                                                          params TToken[] expectedTokens)
         {
             return new FailureParseResult<TToken, TToken>(input);
         }
 
+        /// <summary>
+        /// Creates a failure result representing an unexpected end of the input.
+        /// </summary>
+        /// <typeparam name="TToken">The type of the token.</typeparam>
+        /// <param name="input">The input.</param>
+        /// <param name="expectedTokens">The expected tokens.</param>
+        /// <returns>The failure result.</returns>
         public static IFailureParseResult<TToken, TToken> UnexpectedEndOfInput<TToken>(IInput<TToken> input,
                                                                                        params TToken[] expectedTokens)
         {
             return new FailureParseResult<TToken, TToken>(input);
         }
 
+        /// <summary>
+        /// Creates a failure result that is a combination of underlying failures.
+        /// </summary>
+        /// <typeparam name="TToken">The type of the token.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="failures">The failures.</param>
+        /// <returns>The failure result.</returns>
         public static IFailureParseResult<TToken, TResult> CombinedFailure<TToken, TResult>(
             IEnumerable<IFailureParseResult<TToken, TResult>> failures)
         {
             return new FailureParseResult<TToken, TResult>(failures.First().FirstInput);
         }
 
-        public static IParseResult<TToken, TResult> Cast<TToken, TOriginal, TResult>(
-            this IParseResult<TToken, TOriginal> source)
+        /// <summary>
+        /// Casts the specified source value to the required type.
+        /// </summary>
+        /// <typeparam name="TToken">The type of the token.</typeparam>
+        /// <typeparam name="TSource">The type of the original.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
+        public static IParseResult<TToken, TResult> Cast<TToken, TSource, TResult>(
+            this IParseResult<TToken, TSource> source)
         {
-            var successfulResult = source as ISuccessfulParseResult<TToken, TOriginal>;
-            var failureResult = source as IFailureParseResult<TToken, TOriginal>;
+            var successfulResult = source as ISuccessfulParseResult<TToken, TSource>;
+            var failureResult = source as IFailureParseResult<TToken, TSource>;
             if (successfulResult != null)
                 return Success(
                     successfulResult.FirstInput,
                     successfulResult.RemainingInput,
-                    Utilities.DynamicCast<TOriginal, TResult>(successfulResult.Result));
+                    Utilities.DynamicCast<TSource, TResult>(successfulResult.Result));
             else
                 return Failure<TToken, TResult>(failureResult.FirstInput);
         }
 
+        /// <summary>
+        /// If the given result is successful, then run the given action and return its result, otherwise cast the failure result to the given type and return it.
+        /// </summary>
+        /// <typeparam name="TToken">The type of the token.</typeparam>
+        /// <typeparam name="TOriginal">The type of the original.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The result.</returns>
         public static IParseResult<TToken, TResult> IfSuccess<TToken, TOriginal, TResult>(
             this IParseResult<TToken, TOriginal> source,
             Func<ISuccessfulParseResult<TToken, TOriginal>, IParseResult<TToken, TResult>> action)
@@ -82,6 +151,15 @@ namespace Synapse.Results
                 return source.Cast<TToken, TOriginal, TResult>();
         }
 
+        /// <summary>
+        /// If the given result is a failure, then run the given action and return its result, otherwise cast the successful result to the given type and return it.
+        /// </summary>
+        /// <typeparam name="TToken">The type of the token.</typeparam>
+        /// <typeparam name="TOriginal">The type of the original.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The result.</returns>
         public static IParseResult<TToken, TResult> IfFailure<TToken, TOriginal, TResult>(
             this IParseResult<TToken, TOriginal> source,
             Func<IFailureParseResult<TToken, TOriginal>, IParseResult<TToken, TResult>> action)

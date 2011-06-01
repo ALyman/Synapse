@@ -19,11 +19,22 @@ using Synapse.Results;
 
 namespace Synapse.Parsers
 {
+    /// <summary>
+    /// Projects the result of a parser returning <typeparamref name="TSource"/> to <typeparamref name="TResult" />, given a transformation function.
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
+    /// <typeparam name="TSource">The type of the source.</typeparam>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
     public class ProjectionParser<TToken, TSource, TResult> : IParser<TToken, TResult>
     {
         private readonly Func<TSource, TResult> projection;
         private readonly IParser<TToken, TSource> source;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectionParser&lt;TToken, TSource, TResult&gt;"/> class.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="projection">The projection.</param>
         public ProjectionParser(IParser<TToken, TSource> source, Func<TSource, TResult> projection)
         {
             this.source = source;
@@ -32,6 +43,11 @@ namespace Synapse.Parsers
 
         #region IParser<TToken,TResult> Members
 
+        /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>A <see cref="IParseResult{TToken,TResult}"/> containing the result of the parsing.</returns>
         public IParseResult<TToken, TResult> Parse(IInput<TToken> input)
         {
             return this.source.Parse(input).IfSuccess(

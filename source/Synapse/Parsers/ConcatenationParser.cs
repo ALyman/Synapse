@@ -19,18 +19,37 @@ using Synapse.Results;
 
 namespace Synapse.Parsers
 {
+    /// <summary>
+    /// A parser that concatenates two parsers together, and projects thier results into a final value.
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
+    /// <typeparam name="TFirst">The type of the first.</typeparam>
+    /// <typeparam name="TSecond">The type of the second.</typeparam>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
     public class ConcatenationParser<TToken, TFirst, TSecond, TResult> : IParser<TToken, TResult>
     {
         private readonly IParser<TToken, TFirst> first;
         private readonly Func<TFirst, IParser<TToken, TSecond>> getSecond;
         private readonly Func<TFirst, TSecond, TResult> projection;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConcatenationParser&lt;TToken, TFirst, TSecond, TResult&gt;"/> class.
+        /// </summary>
+        /// <param name="first">The first.</param>
+        /// <param name="second">The second.</param>
+        /// <param name="projection">The projection.</param>
         public ConcatenationParser(IParser<TToken, TFirst> first, IParser<TToken, TSecond> second,
                                    Func<TFirst, TSecond, TResult> projection)
             : this(first, any => second, projection)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConcatenationParser&lt;TToken, TFirst, TSecond, TResult&gt;"/> class.
+        /// </summary>
+        /// <param name="first">The first.</param>
+        /// <param name="getSecond">The get second.</param>
+        /// <param name="projection">The projection.</param>
         public ConcatenationParser(IParser<TToken, TFirst> first, Func<TFirst, IParser<TToken, TSecond>> getSecond,
                                    Func<TFirst, TSecond, TResult> projection)
         {
@@ -41,6 +60,11 @@ namespace Synapse.Parsers
 
         #region IParser<TToken,TResult> Members
 
+        /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>A <see cref="IParseResult{TToken,TResult}"/> containing the result of the parsing.</returns>
         public IParseResult<TToken, TResult> Parse(IInput<TToken> input)
         {
             return this.first.Parse(input).IfSuccess(

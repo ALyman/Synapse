@@ -20,13 +20,27 @@ using Synapse.Input;
 
 namespace Synapse
 {
+    /// <summary>
+    /// Provides extension methods relating to <see cref="IInput{TToken}" />.
+    /// </summary>
     public static class Inputs
     {
+        /// <summary>
+        /// Creates an input from an <see cref="IEnumerable{T}" />.
+        /// </summary>
+        /// <typeparam name="TToken">The type of the token.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <returns>An input that reads from the given source.</returns>
         public static IInput<TToken> AsInput<TToken>(this IEnumerable<TToken> source)
         {
             return new EnumeratorInput<TToken>(source.GetEnumerator());
         }
 
+        /// <summary>
+        /// Creates an input from an <see cref="TextReader" />.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns>An input that reads from the given source.</returns>
         public static IInput<char> AsInput(this TextReader source)
         {
             return new EnumeratorInput<char>(source.AsEnumerator());

@@ -17,10 +17,29 @@ using System.Linq;
 
 namespace Synapse.Input
 {
+    /// <summary>
+    /// Provides the token input to a parser.
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
     public interface IInput<out TToken>
     {
+        /// <summary>
+        /// Gets the current token.
+        /// </summary>
         TToken Current { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the stream is at the end of input.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if at end of input; otherwise, <c>false</c>.
+        /// </value>
         bool EndOfInput { get; }
+
+        /// <summary>
+        /// Moves to the next token.
+        /// </summary>
+        /// <returns>The new input that describes the next token.</returns>
         IInput<TToken> MoveNext();
     }
 }

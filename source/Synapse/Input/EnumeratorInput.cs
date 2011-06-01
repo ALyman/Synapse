@@ -19,6 +19,10 @@ using System.Linq;
 
 namespace Synapse.Input
 {
+    /// <summary>
+    /// An input that reads from an <see cref="IEnumerator{T}" />
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
     public class EnumeratorInput<TToken> : IInput<TToken>
     {
         private readonly IEnumerator<TToken> enumerator;
@@ -27,6 +31,10 @@ namespace Synapse.Input
         private bool read;
         private TToken token;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EnumeratorInput&lt;TToken&gt;"/> class.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
         public EnumeratorInput(IEnumerator<TToken> reader)
         {
             this.enumerator = reader;
@@ -34,6 +42,9 @@ namespace Synapse.Input
 
         #region IInput<TToken> Members
 
+        /// <summary>
+        /// Gets the current token.
+        /// </summary>
         public TToken Current
         {
             get
@@ -47,6 +58,12 @@ namespace Synapse.Input
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the stream is at the end of input.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if at end of input; otherwise, <c>false</c>.
+        /// </value>
         public bool EndOfInput
         {
             get
@@ -56,6 +73,10 @@ namespace Synapse.Input
             }
         }
 
+        /// <summary>
+        /// Moves to the next token.
+        /// </summary>
+        /// <returns>The new input that describes the next token.</returns>
         public IInput<TToken> MoveNext()
         {
             Read();

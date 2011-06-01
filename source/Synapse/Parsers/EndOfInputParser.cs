@@ -19,10 +19,19 @@ using Synapse.Results;
 
 namespace Synapse.Parsers
 {
+    /// <summary>
+    /// A parser that matches only at the end of an input stream.
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
     public class EndOfInputParser<TToken> : IParser<TToken, TToken>
     {
         #region IParser<TToken,TToken> Members
 
+        /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>A <see cref="IParseResult{TToken,TResult}"/> containing the result of the parsing.</returns>
         public IParseResult<TToken, TToken> Parse(IInput<TToken> input)
         {
             if (input.EndOfInput)

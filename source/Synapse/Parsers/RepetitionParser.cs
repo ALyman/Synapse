@@ -20,6 +20,11 @@ using Synapse.Results;
 
 namespace Synapse.Parsers
 {
+    /// <summary>
+    /// A parser that matches another parser zero or more times, filtering for a set count of repetitions.
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
     public class RepetitionParser<TToken, TResult> : IParser<TToken, IEnumerable<TResult>>
     {
         private readonly bool greedy;
@@ -27,6 +32,13 @@ namespace Synapse.Parsers
         private readonly int minimumCount;
         private readonly IParser<TToken, TResult> parser;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepetitionParser&lt;TToken, TResult&gt;"/> class.
+        /// </summary>
+        /// <param name="parser">The parser.</param>
+        /// <param name="minimumCount">The minimum count.</param>
+        /// <param name="maximumCount">The maximum count.</param>
+        /// <param name="greedy">if set to <c>true</c>, then we will read as many as possible, then check the range; otherwise, we will stop reading at the maximum count.</param>
         public RepetitionParser(IParser<TToken, TResult> parser, int minimumCount = 0, int maximumCount = Int32.MaxValue,
                                 bool greedy = false)
         {
@@ -38,6 +50,11 @@ namespace Synapse.Parsers
 
         #region IParser<TToken,IEnumerable<TResult>> Members
 
+        /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>A <see cref="IParseResult{TToken,TResult}"/> containing the result of the parsing.</returns>
         public IParseResult<TToken, IEnumerable<TResult>> Parse(IInput<TToken> input)
         {
             var first = input;

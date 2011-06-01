@@ -16,6 +16,11 @@ using System;
 
 namespace Synapse.Results
 {
+    /// <summary>
+    /// A failure result of a parse
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
     public interface IFailureParseResult<out TToken, out TResult> : IParseResult<TToken, TResult>
     {
     }
