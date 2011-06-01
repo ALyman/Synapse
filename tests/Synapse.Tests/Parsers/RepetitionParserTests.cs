@@ -14,16 +14,16 @@
 
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 using Synapse.Parsers;
 using Synapse.Results;
 
 namespace Synapse.Tests.Parsers
 {
-    [TestClass]
+    [TestFixture]
     public class RepetitionParserTests
     {
-        [TestMethod]
+        [Test]
         public void When_no_items_match_but_were_required()
         {
             var input = new MockInput<int>();
@@ -38,7 +38,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.IsFailure(actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_no_items_match_but_were_not_required()
         {
             var input = new MockInput<int>();
@@ -50,11 +50,11 @@ namespace Synapse.Tests.Parsers
                             }
                 );
             var actualResult = parser.Parse(input);
-            var actualCollection = ParseResultAssert.IsSuccess(actualResult).ToList();
-            CollectionAssert.AreEqual(new int[] {}, actualCollection);
+            var actualCollection = ParseResultAssert.IsSuccess(actualResult);
+            Assert.AreElementsEqual(new int[] {}, actualCollection);
         }
 
-        [TestMethod]
+        [Test]
         public void When_a_single_item_matches()
         {
             var input = new MockInput<int>();
@@ -66,11 +66,11 @@ namespace Synapse.Tests.Parsers
                     }
                 );
             var actualResult = parser.Parse(input);
-            var actualCollection = ParseResultAssert.IsSuccess(actualResult).ToList();
-            CollectionAssert.AreEqual(new[] {1}, actualCollection);
+            var actualCollection = ParseResultAssert.IsSuccess(actualResult);
+            Assert.AreElementsEqual(new[] {1}, actualCollection);
         }
 
-        [TestMethod]
+        [Test]
         public void When_two_items_match()
         {
             var input = new MockInput<int>();
@@ -83,11 +83,11 @@ namespace Synapse.Tests.Parsers
                     }
                 );
             var actualResult = parser.Parse(input);
-            var actualCollection = ParseResultAssert.IsSuccess(actualResult).ToList();
-            CollectionAssert.AreEqual(new[] {1, 2}, actualCollection);
+            var actualCollection = ParseResultAssert.IsSuccess(actualResult);
+            Assert.AreElementsEqual(new[] {1, 2}, actualCollection);
         }
 
-        [TestMethod]
+        [Test]
         public void When_three_items_match()
         {
             var input = new MockInput<int>();
@@ -101,11 +101,11 @@ namespace Synapse.Tests.Parsers
                     }
                 );
             var actualResult = parser.Parse(input);
-            var actualCollection = ParseResultAssert.IsSuccess(actualResult).ToList();
-            CollectionAssert.AreEqual(new[] {1, 2, 3}, actualCollection);
+            var actualCollection = ParseResultAssert.IsSuccess(actualResult);
+            Assert.AreElementsEqual(new[] {1, 2, 3}, actualCollection);
         }
 
-        [TestMethod]
+        [Test]
         public void When_three_items_match_but_required_four()
         {
             var input = new MockInput<int>();
@@ -123,7 +123,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.IsFailure(actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_three_items_match_but_only_wanted_two()
         {
             var input = new MockInput<int>();
@@ -138,11 +138,11 @@ namespace Synapse.Tests.Parsers
                             }
                 );
             var actualResult = parser.Parse(input);
-            var actualCollection = ParseResultAssert.IsSuccess(actualResult).ToList();
-            CollectionAssert.AreEqual(new[] {1, 2}, actualCollection);
+            var actualCollection = ParseResultAssert.IsSuccess(actualResult);
+            Assert.AreElementsEqual(new[] {1, 2}, actualCollection);
         }
 
-        [TestMethod]
+        [Test]
         public void When_three_items_match_but_only_wanted_two_greedy()
         {
             var input = new MockInput<int>();

@@ -14,15 +14,15 @@
 
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 using Synapse.Parsers;
 
 namespace Synapse.Tests.Parsers
 {
-    [TestClass]
+    [TestFixture]
     public class AlternativeParserTests
     {
-        [TestMethod]
+        [Test]
         public void When_all_alternatives_match()
         {
             var input = new MockInput<int>();
@@ -35,7 +35,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.AreEqual('1', result);
         }
 
-        [TestMethod]
+        [Test]
         public void When_the_first_alternative_matches()
         {
             var input = new MockInput<int>();
@@ -47,7 +47,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.AreEqual('1', result);
         }
 
-        [TestMethod]
+        [Test]
         public void When_the_second_alternative_matches()
         {
             var input = new MockInput<int>();
@@ -59,7 +59,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.AreEqual('2', result);
         }
 
-        [TestMethod]
+        [Test]
         public void When_the_third_alternative_matches()
         {
             var input = new MockInput<int>();
@@ -72,7 +72,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.AreEqual('2', result);
         }
 
-        [TestMethod]
+        [Test]
         public void When_no_alternative_matches()
         {
             var input = new MockInput<int>();

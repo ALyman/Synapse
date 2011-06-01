@@ -15,12 +15,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 using Synapse.Input;
 
 namespace Synapse.Tests.Input
 {
-    [TestClass]
+    [TestFixture]
     public class EnumeratorInputTests : InputTestsBase
     {
         protected override IInput<char> CreateInputFrom(IEnumerable<char> source)

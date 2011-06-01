@@ -13,7 +13,7 @@
 #endregion
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 using Synapse.Results;
 
 namespace Synapse.Tests
@@ -24,21 +24,21 @@ namespace Synapse.Tests
         {
             var successResult = result as ISuccessfulParseResult<TToken, TResult>;
             if (successResult == null)
-                throw new AssertFailedException("ParseResultAssert.IsSuccess failed: ParseResult was not a success");
+                Assert.Fail("ParseResultAssert.IsSuccess failed: ParseResult was not a success");
             return successResult.Result;
         }
 
         public static void IsFailure<TToken, TResult>(IParseResult<TToken, TResult> result)
         {
             if (!(result is IFailureParseResult<TToken, TResult>))
-                throw new AssertFailedException("ParseResultAssert.IsFailure failed: ParseResult was not a failure");
+                Assert.Fail("ParseResultAssert.IsFailure failed: ParseResult was not a failure");
         }
 
         public static void AreEqual<TToken, TResult>(TResult expected, IParseResult<TToken, TResult> result)
         {
             var successfulParseResult = result as ISuccessfulParseResult<TToken, TResult>;
             if (successfulParseResult == null)
-                throw new AssertFailedException("ParseResultAssert.AreEqual failed: ParseResult was not a success");
+                Assert.Fail("ParseResultAssert.AreEqual failed: ParseResult was not a success");
             Assert.AreEqual(expected, successfulParseResult.Result);
         }
     }

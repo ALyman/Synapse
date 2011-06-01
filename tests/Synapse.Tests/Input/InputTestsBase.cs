@@ -16,24 +16,24 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 using Synapse.Input;
 
 namespace Synapse.Tests
 {
-    [TestClass]
+    [TestFixture]
     public abstract class InputTestsBase
     {
         protected abstract IInput<char> CreateInputFrom(IEnumerable<char> source);
 
-        [TestMethod]
+        [Test]
         public void When_I_have_an_empty_source_I_start_and_the_end_of_input()
         {
             var input = CreateInputFrom(new char[] {});
             Assert.IsTrue(input.EndOfInput);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_read_the_only_token_I_recieve_it()
         {
             var input = CreateInputFrom(new[] {'a'});
@@ -42,7 +42,7 @@ namespace Synapse.Tests
             Assert.IsTrue(input.EndOfInput);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_read_the_last_token_I_no_longer_move_forward()
         {
             var input = CreateInputFrom(new[] {'a', 'b'});
@@ -56,7 +56,7 @@ namespace Synapse.Tests
             Assert.AreEqual(input, input.MoveNext());
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_try_to_get_the_current_token_at_the_end_of_input_it_throws()
         {
             var input = CreateInputFrom(new char[] {});

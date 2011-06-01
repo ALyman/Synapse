@@ -6,11 +6,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Tests", "tests\Synapse.Tests\Synapse.Tests.csproj", "{7DD8EEB1-340E-4EE2-AD90-CE2E7769E4CF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{EF57C242-0BD6-4F64-9057-60298AC8548B}"
-	ProjectSection(SolutionItems) = preProject
-		Local.testsettings = Local.testsettings
-		Synapse.vsmdi = Synapse.vsmdi
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{509A73DB-2C57-43B1-B11D-4E5F566FAE92}"
 EndProject

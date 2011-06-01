@@ -14,15 +14,15 @@
 
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 using Synapse.Parsers;
 
 namespace Synapse.Tests.Parsers
 {
-    [TestClass]
+    [TestFixture]
     public class EndOfInputParserTests
     {
-        [TestMethod]
+        [Test]
         public void When_at_the_end_of_input()
         {
             var input = new int[] {}.AsInput();
@@ -31,7 +31,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.IsSuccess(actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_not_at_the_end_of_input()
         {
             var input = new[] {1}.AsInput();

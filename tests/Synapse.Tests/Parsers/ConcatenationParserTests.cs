@@ -13,15 +13,15 @@
 #endregion
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 using Synapse.Parsers;
 
 namespace Synapse.Tests.Parsers
 {
-    [TestClass]
+    [TestFixture]
     public class ConcatenationParserTests
     {
-        [TestMethod]
+        [Test]
         public void When_both_parts_match()
         {
             var input = new MockInput<int>();
@@ -43,7 +43,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.AreEqual("x", result);
         }
 
-        [TestMethod]
+        [Test]
         public void When_both_parts_fail()
         {
             var input = new MockInput<int>();
@@ -63,7 +63,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.IsFailure(result);
         }
 
-        [TestMethod]
+        [Test]
         public void When_the_first_part_matches_but_the_second_fails()
         {
             var input = new MockInput<int>();

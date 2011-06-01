@@ -15,14 +15,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 
 namespace Synapse.Tests.Fluent
 {
-    [TestClass]
+    [TestFixture]
     public class FluentParsingTests
     {
-        [TestMethod]
+        [Test]
         public void When_I_match_a_token()
         {
             var input = new[] {1}.AsInput();
@@ -32,7 +32,7 @@ namespace Synapse.Tests.Fluent
             ParseResultAssert.AreEqual(1, actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_match_a_token_with_a_special_comparer()
         {
             var input = new[] {1}.AsInput();
@@ -42,7 +42,7 @@ namespace Synapse.Tests.Fluent
             ParseResultAssert.AreEqual(1, actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_concatenate_two_tokens()
         {
             var input = new[] {1, 2}.AsInput();
@@ -54,7 +54,7 @@ namespace Synapse.Tests.Fluent
             ParseResultAssert.AreEqual(3, actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_project_a_value()
         {
             var input = new[] {1, 2}.AsInput();
@@ -65,27 +65,27 @@ namespace Synapse.Tests.Fluent
             ParseResultAssert.AreEqual(7, actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_repeat_zero_or_more_but_dont_match()
         {
             var input = new[] {2}.AsInput();
             var parser = Parse.Match(1).ZeroOrMore();
             var actualResult = parser.Parse(input);
-            var actualCollection = ParseResultAssert.IsSuccess(actualResult).ToList();
-            CollectionAssert.AreEqual(new int[0], actualCollection);
+            var actualCollection = ParseResultAssert.IsSuccess(actualResult);
+            Assert.AreElementsEqual(new int[0], actualCollection);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_repeat_zero_or_more_and_match()
         {
             var input = new[] {1, 1, 1, 2}.AsInput();
             var parser = Parse.Match(1).ZeroOrMore();
             var actualResult = parser.Parse(input);
-            var actualCollection = ParseResultAssert.IsSuccess(actualResult).ToList();
-            CollectionAssert.AreEqual(new[] {1, 1, 1}, actualCollection);
+            var actualCollection = ParseResultAssert.IsSuccess(actualResult);
+            Assert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_repeat_one_or_more_but_dont_match()
         {
             var input = new[] {2}.AsInput();
@@ -94,27 +94,27 @@ namespace Synapse.Tests.Fluent
             ParseResultAssert.IsFailure(actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_repeat_one_or_more_and_match()
         {
             var input = new[] {1, 1, 1, 2}.AsInput();
             var parser = Parse.Match(1).OneOrMore();
             var actualResult = parser.Parse(input);
-            var actualCollection = ParseResultAssert.IsSuccess(actualResult).ToList();
-            CollectionAssert.AreEqual(new[] {1, 1, 1}, actualCollection);
+            var actualCollection = ParseResultAssert.IsSuccess(actualResult);
+            Assert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_repeat_some_and_match()
         {
             var input = new[] {1, 1, 1, 2}.AsInput();
             var parser = Parse.Match(1).Repeat(minimumCount: 2, maximumCount: 4);
             var actualResult = parser.Parse(input);
-            var actualCollection = ParseResultAssert.IsSuccess(actualResult).ToList();
-            CollectionAssert.AreEqual(new[] {1, 1, 1}, actualCollection);
+            var actualCollection = ParseResultAssert.IsSuccess(actualResult);
+            Assert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_repeat_some_and_match_miss_count()
         {
             var input = new[] {1, 1, 1, 2}.AsInput();
@@ -123,7 +123,7 @@ namespace Synapse.Tests.Fluent
             ParseResultAssert.IsFailure(actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_or_and_the_first_alternative_matches()
         {
             var input = new[] {1}.AsInput();
@@ -133,7 +133,7 @@ namespace Synapse.Tests.Fluent
             ParseResultAssert.AreEqual(1, actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_or_and_the_second_alternative_matches()
         {
             var input = new[] {2}.AsInput();
@@ -143,7 +143,7 @@ namespace Synapse.Tests.Fluent
             ParseResultAssert.AreEqual(2, actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_or_and_no_alternative_matches()
         {
             var input = new[] {3}.AsInput();
@@ -152,7 +152,7 @@ namespace Synapse.Tests.Fluent
             ParseResultAssert.IsFailure(actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_match_the_end_of_input_when_at_the_end_of_input()
         {
             var input = new int[] {}.AsInput();
@@ -161,7 +161,7 @@ namespace Synapse.Tests.Fluent
             ParseResultAssert.IsSuccess(actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_I_match_the_end_of_input_when_not_at_the_end_of_input()
         {
             var input = new[] {1}.AsInput();

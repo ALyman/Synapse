@@ -14,15 +14,15 @@
 
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 using Synapse.Parsers;
 
 namespace Synapse.Tests.Parsers
 {
-    [TestClass]
+    [TestFixture]
     public class TokenMatchParserTests
     {
-        [TestMethod]
+        [Test]
         public void When_the_token_matches()
         {
             var input = new[] {1}.AsInput();
@@ -32,7 +32,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.AreEqual(1, result);
         }
 
-        [TestMethod]
+        [Test]
         public void When_the_token_doesnt_match()
         {
             var input = new[] {1}.AsInput();
@@ -41,7 +41,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.IsFailure(result);
         }
 
-        [TestMethod]
+        [Test]
         public void When_at_the_end_of_input()
         {
             var input = new int[0].AsInput();

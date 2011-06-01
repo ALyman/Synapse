@@ -7,20 +7,32 @@
     <BasePath>$(MSBuildProjectDirectory)\..</BasePath>
     <OutputPath>$(BasePath)\build-result\$(Configuration)</OutputPath>
     <SolutionPath>$(BasePath)\Synapse.sln</SolutionPath>
+
+    <GallioEchoPath>$(BasePath)\tools\Gallio\Gallio.Echo.exe</GallioEchoPath>
   </PropertyGroup>
- 
+
+  <UsingTask AssemblyFile="$(BasePath)\tools\Gallio\Gallio.MSBuildTasks.dll" TaskName="Gallio" />
+
   <Target Name="default" DependsOnTargets="Compile; Test; Package" />
- 
+
   <Target Name="Compile">
     <MSBuild Projects="$(SolutionPath)" Properties="Configuration=$(Configuration);BaseOutputPath=$(OutputPath)"  />
   </Target>
 
+  <ItemGroup>
+    <GallioEchoArgs Include="/report-type:MHtml"/>
+    <GallioEchoArgs Include="/report-directory:$(OutputPath)\test-results\"/>
+    <GallioEchoArgs Include="$(BasePath)\tests\Synapse.Tests\bin\$(Configuration)\Synapse.Tests.dll"/>
+  </ItemGroup>
+
   <Target Name="Test" DependsOnTargets="Compile">
-    <Message Importance="high" Text="TODO: Run Tests" />
+    <Exec
+      Command="$(GallioEchoPath) @(GallioEchoArgs, ' ')"
+      CustomErrorRegularExpression="\[failed\]" />
   </Target>
 
   <Target Name="Package" DependsOnTargets="Compile">
-    <Exec WorkingDirectory="$(BasePath)\source\Synapse\" 
+    <Exec WorkingDirectory="$(BasePath)\source\Synapse\"
           Command="$(BasePath)\tools\NuGet.exe pack &quot;$(BasePath)\source\Synapse\Synapse.csproj&quot; /Configuration $(Configuration) /OutputDirectory &quot;$(OutputPath)&quot;" />
     <Exec WorkingDirectory="$(BasePath)\source\Synapse\"
           Command="$(BasePath)\tools\NuGet.exe pack &quot;$(BasePath)\source\Synapse\Synapse.csproj&quot; /Configuration $(Configuration) /OutputDirectory &quot;$(OutputPath)&quot; /Symbols" />

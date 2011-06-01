@@ -14,15 +14,15 @@
 
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 using Synapse.Parsers;
 
 namespace Synapse.Tests.Parsers
 {
-    [TestClass]
+    [TestFixture]
     public class ProjectionParserTests
     {
-        [TestMethod]
+        [Test]
         public void When_projecting_a_successful_result()
         {
             var input = new MockInput<int>();
@@ -33,7 +33,7 @@ namespace Synapse.Tests.Parsers
             ParseResultAssert.AreEqual(4.0m, actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void When_projecting_a_failure_result()
         {
             var input = new MockInput<int>();

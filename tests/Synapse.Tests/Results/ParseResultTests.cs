@@ -14,15 +14,15 @@
 
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MbUnit.Framework;
 using Synapse.Results;
 
 namespace Synapse.Tests.Results
 {
-    [TestClass]
+    [TestFixture]
     public class ParseResultTests
     {
-        [TestMethod]
+        [Test]
         public void IfSuccess_called_on_a_successful_result()
         {
             var firstInput = new MockInput<int>();
@@ -39,7 +39,7 @@ namespace Synapse.Tests.Results
             Assert.AreEqual(expectedResult, actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void IfSuccess_called_on_a_failed_result()
         {
             var firstInput = new MockInput<int>();
@@ -47,7 +47,7 @@ namespace Synapse.Tests.Results
             var actualResult = originalResult.IfSuccess(
                 successfulResult =>
                     {
-                        Assert.AreEqual(originalResult, successfulResult);
+                        Assert.Fail("IfSuccess called the action, somehow");
                         return originalResult;
                     }
                 );
@@ -56,7 +56,7 @@ namespace Synapse.Tests.Results
             ParseResultAssert.IsFailure(actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void IfFailure_called_on_a_failed_result()
         {
             var firstInput = new MockInput<int>();
@@ -73,7 +73,7 @@ namespace Synapse.Tests.Results
             Assert.AreEqual(expectedResult, actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void IfFailure_called_on_a_successful_result()
         {
             var firstInput = new MockInput<int>();
@@ -82,7 +82,7 @@ namespace Synapse.Tests.Results
             var actualResult = originalResult.IfFailure(
                 successfulResult =>
                     {
-                        Assert.AreEqual(originalResult, successfulResult);
+                        Assert.Fail("IfFailure called the action, somehow");
                         return originalResult;
                     }
                 );
@@ -91,7 +91,7 @@ namespace Synapse.Tests.Results
             ParseResultAssert.IsSuccess(actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void Cast_called_on_a_failed_result()
         {
             var firstInput = new MockInput<int>();
@@ -103,7 +103,7 @@ namespace Synapse.Tests.Results
             ParseResultAssert.IsFailure(actualResult);
         }
 
-        [TestMethod]
+        [Test]
         public void Cast_called_on_a_successful_result()
         {
             var firstInput = new MockInput<int>();
