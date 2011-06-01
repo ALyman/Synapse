@@ -1,0 +1,28 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="default">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+  </PropertyGroup>
+  <PropertyGroup>
+    <BasePath>$(MSBuildProjectDirectory)\..</BasePath>
+    <OutputPath>$(BasePath)\build-result\$(Configuration)</OutputPath>
+    <SolutionPath>$(BasePath)\Synapse.sln</SolutionPath>
+  </PropertyGroup>
+ 
+  <Target Name="default" DependsOnTargets="Compile; Test; Package" />
+ 
+  <Target Name="Compile">
+    <MSBuild Projects="$(SolutionPath)" Properties="Configuration=$(Configuration);BaseOutputPath=$(OutputPath)"  />
+  </Target>
+
+  <Target Name="Test" DependsOnTargets="Compile">
+    <Message Importance="high" Text="TODO: Run Tests" />
+  </Target>
+
+  <Target Name="Package" DependsOnTargets="Compile">
+    <Exec WorkingDirectory="$(BasePath)\source\Synapse\" 
+          Command="$(BasePath)\tools\NuGet.exe pack &quot;$(BasePath)\source\Synapse\Synapse.csproj&quot; /Configuration $(Configuration) /OutputDirectory &quot;$(OutputPath)&quot;" />
+    <Exec WorkingDirectory="$(BasePath)\source\Synapse\"
+          Command="$(BasePath)\tools\NuGet.exe pack &quot;$(BasePath)\source\Synapse\Synapse.csproj&quot; /Configuration $(Configuration) /OutputDirectory &quot;$(OutputPath)&quot; /Symbols" />
+  </Target>
+</Project>

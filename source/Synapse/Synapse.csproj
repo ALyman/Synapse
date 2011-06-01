@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <BaseOutputPath>..\..\build-result\$(Configuration)</BaseOutputPath>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{556D84F6-6A4B-4431-92CF-55F7E5219A33}</ProjectGuid>
@@ -17,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\build\Debug\lib\net4</OutputPath>
+    <OutputPath>$(BaseOutputPath)\lib\net4</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,11 +26,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\build\Release\lib\net4</OutputPath>
+    <OutputPath>$(BaseOutputPath)\lib\net4</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\build\Release\lib\net4\Synapse.XML</DocumentationFile>
+    <DocumentationFile>$(BaseOutputPath)\lib\net4\Synapse.XML</DocumentationFile>
     <WarningsAsErrors>
     </WarningsAsErrors>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
@@ -37,11 +38,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Official|AnyCPU'">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\build\Official\lib\net4</OutputPath>
+    <OutputPath>$(BaseOutputPath)\lib\net4</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\build\Official\lib\net4\Synapse.XML</DocumentationFile>
+    <DocumentationFile>$(BaseOutputPath)\lib\net4\Synapse.XML</DocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>D:\Key-Private.snk</AssemblyOriginatorKeyFile>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>

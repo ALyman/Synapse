@@ -32,6 +32,4 @@ NDependOut
 StyleCop.Cache
 *.vs10x
 *.docstates
-/build/Debug/
-/build/Release/
-/build/Official/
+/build-result/
