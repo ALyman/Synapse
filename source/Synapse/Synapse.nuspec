@@ -1,14 +1,20 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
+    <id>Synapse</id>
+    <version>0.0</version>
+    <authors>Alex Lyman</authors>
+    <owners>Alex Lyman</owners>
     <licenseUrl>https://github.com/ALyman/Synapse/raw/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/ALyman/Synapse/</projectUrl>
+    <projectUrl>https://github.com/ALyman/Synapse</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>The Synapse Parser Combinator Framework</description>
     <tags>synapse parser combinator framework</tags>
   </metadata>
+  <files>
+    <file src="lib\net40\Synapse.dll" target="lib\net40" />
+    <file src="lib\net40\Synapse.pdb" target="lib\net40" />
+    <file src="lib\net40\Synapse.XML" target="lib\net40" />
+    <file src="$(BasePath)\source\Synapse\**\*.cs" target="src" />
+  </files>
 </package>

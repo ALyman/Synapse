@@ -17,8 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Information", "Information"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A161B9DF-E5CE-47FA-80CA-1B3970FC8045}"
 	ProjectSection(SolutionItems) = preProject
-		build\build.proj = build\build.proj
 		build.ps1 = build.ps1
+		Key-Public.snk = Key-Public.snk
 	EndProjectSection
 EndProject
 Global
@@ -27,20 +27,15 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Official|Any CPU = Official|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{556D84F6-6A4B-4431-92CF-55F7E5219A33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{556D84F6-6A4B-4431-92CF-55F7E5219A33}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{556D84F6-6A4B-4431-92CF-55F7E5219A33}.Official|Any CPU.ActiveCfg = Official|Any CPU
-		{556D84F6-6A4B-4431-92CF-55F7E5219A33}.Official|Any CPU.Build.0 = Official|Any CPU
 		{556D84F6-6A4B-4431-92CF-55F7E5219A33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{556D84F6-6A4B-4431-92CF-55F7E5219A33}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7DD8EEB1-340E-4EE2-AD90-CE2E7769E4CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7DD8EEB1-340E-4EE2-AD90-CE2E7769E4CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DD8EEB1-340E-4EE2-AD90-CE2E7769E4CF}.Official|Any CPU.ActiveCfg = Release|Any CPU
-		{7DD8EEB1-340E-4EE2-AD90-CE2E7769E4CF}.Official|Any CPU.Build.0 = Release|Any CPU
 		{7DD8EEB1-340E-4EE2-AD90-CE2E7769E4CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DD8EEB1-340E-4EE2-AD90-CE2E7769E4CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
