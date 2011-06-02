@@ -2,13 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Coverage Condition=" '$(Coverage)' == '' ">False</Coverage>
   </PropertyGroup>
   <PropertyGroup>
     <BasePath>$(MSBuildProjectDirectory)\..</BasePath>
-    <OutputPath>$(BasePath)\build-result\$(Configuration)</OutputPath>
+    <OutputPath>.\build-result\$(Configuration)</OutputPath>
     <SolutionPath>$(BasePath)\Synapse.sln</SolutionPath>
 
-    <GallioEchoPath>$(BasePath)\tools\Gallio\Gallio.Echo.exe</GallioEchoPath>
+    <GallioEchoPath>.\tools\Gallio\Gallio.Echo.exe</GallioEchoPath>
+    <DotCoverPath>C:\Program Files (x86)\JetBrains\dotCover\v1.1\Bin\dotCover.exe</DotCoverPath>
   </PropertyGroup>
 
   <UsingTask AssemblyFile="$(BasePath)\tools\Gallio\Gallio.MSBuildTasks.dll" TaskName="Gallio" />
@@ -20,15 +22,44 @@
   </Target>
 
   <ItemGroup>
-    <GallioEchoArgs Include="/report-type:MHtml"/>
+    <GallioEchoArgs Include="/report-type:Html"/>
     <GallioEchoArgs Include="/report-directory:$(OutputPath)\test-results\"/>
-    <GallioEchoArgs Include="$(BasePath)\tests\Synapse.Tests\bin\$(Configuration)\Synapse.Tests.dll"/>
+    <GallioEchoArgs Include=".\tests\Synapse.Tests\bin\$(Configuration)\Synapse.Tests.dll"/>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DotCoverSnapshotFile>$(OutputPath)\test-results\Coverage.snapshot</DotCoverSnapshotFile>
+    <DotCoverReportHtmlFile>$(OutputPath)\test-results\Coverage.html</DotCoverReportHtmlFile>
+    <DotCoverReportXmlFile>$(OutputPath)\test-results\Coverage.xml</DotCoverReportXmlFile>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <DotCoverArgs Include="&quot;/TargetExecutable=$(GallioEchoPath)&quot;"/>
+    <DotCoverArgs Include="&quot;/TargetWorkingDir=$(BasePath)&quot;"/>
+    <DotCoverArgs Include="/Filters=+:module=Synapse"/>
+    <DotCoverArgs Include="/Output=$(DotCoverSnapshotFile)"/>
   </ItemGroup>
 
   <Target Name="Test" DependsOnTargets="Compile">
-    <Exec
+    <Exec Condition=" '$(Coverage)' == 'False' "
       Command="$(GallioEchoPath) @(GallioEchoArgs, ' ')"
-      CustomErrorRegularExpression="\[failed\]" />
+      CustomErrorRegularExpression="\[failed\]"
+      WorkingDirectory="$(BasePath)" />
+    
+    <Exec Condition=" '$(Coverage)' == 'True' "
+      Command="&quot;$(DotCoverPath)&quot; cover @(DotCoverArgs, ' ') /TargetArguments=&quot;@(GallioEchoArgs, ' ')&quot;"
+      CustomErrorRegularExpression="\[failed\]"
+      WorkingDirectory="$(BasePath)" />
+
+    <Exec Condition=" '$(Coverage)' == 'True' "
+      Command="&quot;$(DotCoverPath)&quot; report /Source=&quot;$(DotCoverSnapshotFile)&quot; /Output=&quot;$(DotCoverReportHtmlFile)&quot; /ReportType=HTML"
+      CustomErrorRegularExpression="\[failed\]"
+      WorkingDirectory="$(BasePath)" />
+
+    <Exec Condition=" '$(Coverage)' == 'True' "
+      Command="&quot;$(DotCoverPath)&quot; report /Source=&quot;$(DotCoverSnapshotFile)&quot; /Output=&quot;$(DotCoverReportXmlFile)&quot; /ReportType=XML"
+      CustomErrorRegularExpression="\[failed\]"
+      WorkingDirectory="$(BasePath)" />
   </Target>
 
   <Target Name="Package" DependsOnTargets="Compile">
