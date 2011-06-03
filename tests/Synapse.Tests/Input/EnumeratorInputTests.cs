@@ -15,7 +15,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MbUnit.Framework;
+#if TEST_MBUNIT
+using TestFixtureAttribute =  MbUnit.Framework.TestFixtureAttribute;
+using TestAttribute =  MbUnit.Framework.TestAttribute;
+using Assert =  MbUnit.Framework.Assert;
+using CollectionAssert =  MbUnit.Framework.Assert;
+#else
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using CollectionAssert = Synapse.Tests.Utilities.CollectionAssert;
+#endif
 using Synapse.Input;
 
 namespace Synapse.Tests.Input

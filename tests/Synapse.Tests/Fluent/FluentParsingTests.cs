@@ -15,7 +15,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MbUnit.Framework;
+#if TEST_MBUNIT
+using TestFixtureAttribute =  MbUnit.Framework.TestFixtureAttribute;
+using TestAttribute =  MbUnit.Framework.TestAttribute;
+using Assert =  MbUnit.Framework.Assert;
+using CollectionAssert =  MbUnit.Framework.Assert;
+#else
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using CollectionAssert = Synapse.Tests.Utilities.CollectionAssert;
+#endif
 
 namespace Synapse.Tests.Fluent
 {
@@ -72,7 +82,7 @@ namespace Synapse.Tests.Fluent
             var parser = Parse.Match(1).ZeroOrMore();
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            Assert.AreElementsEqual(new int[0], actualCollection);
+            CollectionAssert.AreElementsEqual(new int[0], actualCollection);
         }
 
         [Test]
@@ -82,7 +92,7 @@ namespace Synapse.Tests.Fluent
             var parser = Parse.Match(1).ZeroOrMore();
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            Assert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
+            CollectionAssert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
         }
 
         [Test]
@@ -101,7 +111,7 @@ namespace Synapse.Tests.Fluent
             var parser = Parse.Match(1).OneOrMore();
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            Assert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
+            CollectionAssert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
         }
 
         [Test]
@@ -111,7 +121,7 @@ namespace Synapse.Tests.Fluent
             var parser = Parse.Match(1).Repeat(minimumCount: 2, maximumCount: 4);
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            Assert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
+            CollectionAssert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
         }
 
         [Test]
