@@ -27,8 +27,6 @@ namespace Synapse.Parsers
     /// <typeparam name="TResult">The type of the result.</typeparam>
     public class RepetitionParser<TToken, TResult> : IParser<TToken, IEnumerable<TResult>>
     {
-        private readonly bool greedy;
-        private readonly int maximumCount;
         private readonly int minimumCount;
         private readonly IParser<TToken, TResult> parser;
 
@@ -37,15 +35,10 @@ namespace Synapse.Parsers
         /// </summary>
         /// <param name="parser">The parser.</param>
         /// <param name="minimumCount">The minimum count.</param>
-        /// <param name="maximumCount">The maximum count.</param>
-        /// <param name="greedy">if set to <c>true</c>, then we will read as many as possible, then check the range; otherwise, we will stop reading at the maximum count.</param>
-        public RepetitionParser(IParser<TToken, TResult> parser, int minimumCount = 0, int maximumCount = Int32.MaxValue,
-                                bool greedy = false)
+        public RepetitionParser(IParser<TToken, TResult> parser, int minimumCount = 0)
         {
             this.parser = parser;
             this.minimumCount = minimumCount;
-            this.maximumCount = maximumCount;
-            this.greedy = greedy;
         }
 
         #region IParser<TToken,IEnumerable<TResult>> Members
@@ -61,17 +54,16 @@ namespace Synapse.Parsers
             var results = new List<TResult>();
             var current = this.parser.Parse(input);
 
-            while (current is ISuccessfulParseResult<TToken, TResult> &&
-                   (this.greedy || results.Count < this.maximumCount))
+            while (current is ISuccessfulParseResult<TToken, TResult>)
             {
-                results.Add(((ISuccessfulParseResult<TToken, TResult>) current).Result);
+                results.Add(((ISuccessfulParseResult<TToken, TResult>)current).Result);
                 input = current.RemainingInput;
                 current = this.parser.Parse(input);
             }
 
-            if (results.Count < this.minimumCount || results.Count > this.maximumCount)
+            if (results.Count < this.minimumCount)
             {
-                return ParseResult.Failure<TToken, IEnumerable<TResult>>(first);
+                return ParseResult.Failure<TToken, IEnumerable<TResult>>(first, new[] { this.parser });
             }
             else
             {

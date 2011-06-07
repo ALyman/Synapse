@@ -21,7 +21,7 @@ namespace Synapse.Results
     /// </summary>
     /// <typeparam name="TToken">The type of the token.</typeparam>
     /// <typeparam name="TResult">The type of the result.</typeparam>
-    public interface ISuccessfulParseResult<out TToken, out TResult> : IParseResult<TToken, TResult>
+    public interface ISuccessfulParseResult<TToken, out TResult> : IParseResult<TToken, TResult>
     {
         /// <summary>
         /// Gets the result value.

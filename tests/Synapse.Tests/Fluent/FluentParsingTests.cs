@@ -35,7 +35,7 @@ namespace Synapse.Tests.Fluent
         [Test]
         public void When_I_match_a_token()
         {
-            var input = new[] {1}.AsInput();
+            var input = new[] { 1 }.AsInput();
             var parser = Parse.Match(1);
             var actualResult = parser.Parse(input);
             ParseResultAssert.IsSuccess(actualResult);
@@ -45,7 +45,7 @@ namespace Synapse.Tests.Fluent
         [Test]
         public void When_I_match_a_token_with_a_special_comparer()
         {
-            var input = new[] {1}.AsInput();
+            var input = new[] { 1 }.AsInput();
             var parser = Parse.Match(2, new SpecialIntComparer());
             var actualResult = parser.Parse(input);
             ParseResultAssert.IsSuccess(actualResult);
@@ -55,7 +55,7 @@ namespace Synapse.Tests.Fluent
         [Test]
         public void When_I_concatenate_two_tokens()
         {
-            var input = new[] {1, 2}.AsInput();
+            var input = new[] { 1, 2 }.AsInput();
             var parser = from a in Parse.Match(1)
                          from b in Parse.Match(2)
                          select a + b;
@@ -67,7 +67,7 @@ namespace Synapse.Tests.Fluent
         [Test]
         public void When_I_project_a_value()
         {
-            var input = new[] {1, 2}.AsInput();
+            var input = new[] { 1, 2 }.AsInput();
             var parser = from a in Parse.Match(1)
                          select 7;
             var actualResult = parser.Parse(input);
@@ -78,7 +78,7 @@ namespace Synapse.Tests.Fluent
         [Test]
         public void When_I_repeat_zero_or_more_but_dont_match()
         {
-            var input = new[] {2}.AsInput();
+            var input = new[] { 2 }.AsInput();
             var parser = Parse.Match(1).ZeroOrMore();
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
@@ -88,47 +88,47 @@ namespace Synapse.Tests.Fluent
         [Test]
         public void When_I_repeat_zero_or_more_and_match()
         {
-            var input = new[] {1, 1, 1, 2}.AsInput();
+            var input = new[] { 1, 1, 1, 2 }.AsInput();
             var parser = Parse.Match(1).ZeroOrMore();
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            CollectionAssert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
+            CollectionAssert.AreElementsEqual(new[] { 1, 1, 1 }, actualCollection);
         }
 
         [Test]
         public void When_I_repeat_one_or_more_but_dont_match()
         {
-            var input = new[] {2}.AsInput();
+            var input = new[] { 2 }.AsInput();
             var parser = Parse.Match(1).OneOrMore();
             var actualResult = parser.Parse(input);
-            ParseResultAssert.IsFailure(actualResult);
+            ParseResultAssert.IsFailure(actualResult, new[] { 1 });
         }
 
         [Test]
         public void When_I_repeat_one_or_more_and_match()
         {
-            var input = new[] {1, 1, 1, 2}.AsInput();
+            var input = new[] { 1, 1, 1, 2 }.AsInput();
             var parser = Parse.Match(1).OneOrMore();
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            CollectionAssert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
+            CollectionAssert.AreElementsEqual(new[] { 1, 1, 1 }, actualCollection);
         }
 
         [Test]
         public void When_I_repeat_some_and_match()
         {
             var input = new[] {1, 1, 1, 2}.AsInput();
-            var parser = Parse.Match(1).Repeat(minimumCount: 2, maximumCount: 4);
+            var parser = Parse.Match(1).Repeat(minimumCount: 2);
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
             CollectionAssert.AreElementsEqual(new[] {1, 1, 1}, actualCollection);
         }
 
         [Test]
-        public void When_I_repeat_some_and_match_miss_count()
+        public void When_I_repeat_some_and_dont_get_enough()
         {
             var input = new[] {1, 1, 1, 2}.AsInput();
-            var parser = Parse.Match(1).Repeat(minimumCount: 2, maximumCount: 2, greedy: true);
+            var parser = Parse.Match(1).Repeat(minimumCount: 4);
             var actualResult = parser.Parse(input);
             ParseResultAssert.IsFailure(actualResult);
         }
@@ -136,7 +136,7 @@ namespace Synapse.Tests.Fluent
         [Test]
         public void When_I_or_and_the_first_alternative_matches()
         {
-            var input = new[] {1}.AsInput();
+            var input = new[] { 1 }.AsInput();
             var parser = Parse.Or(Parse.Match(1), Parse.Match(2));
             var actualResult = parser.Parse(input);
             ParseResultAssert.IsSuccess(actualResult);
@@ -146,7 +146,7 @@ namespace Synapse.Tests.Fluent
         [Test]
         public void When_I_or_and_the_second_alternative_matches()
         {
-            var input = new[] {2}.AsInput();
+            var input = new[] { 2 }.AsInput();
             var parser = Parse.Or(Parse.Match(1), Parse.Match(2));
             var actualResult = parser.Parse(input);
             ParseResultAssert.IsSuccess(actualResult);
@@ -156,16 +156,16 @@ namespace Synapse.Tests.Fluent
         [Test]
         public void When_I_or_and_no_alternative_matches()
         {
-            var input = new[] {3}.AsInput();
+            var input = new[] { 3 }.AsInput();
             var parser = Parse.Or(Parse.Match(1), Parse.Match(2));
             var actualResult = parser.Parse(input);
-            ParseResultAssert.IsFailure(actualResult);
+            ParseResultAssert.IsFailure(actualResult, new[] { 1, 2 });
         }
 
         [Test]
         public void When_I_match_the_end_of_input_when_at_the_end_of_input()
         {
-            var input = new int[] {}.AsInput();
+            var input = new int[] { }.AsInput();
             var parser = Parse.End<int>();
             var actualResult = parser.Parse(input);
             ParseResultAssert.IsSuccess(actualResult);
@@ -174,7 +174,7 @@ namespace Synapse.Tests.Fluent
         [Test]
         public void When_I_match_the_end_of_input_when_not_at_the_end_of_input()
         {
-            var input = new[] {1}.AsInput();
+            var input = new[] { 1 }.AsInput();
             var parser = Parse.End<int>();
             var actualResult = parser.Parse(input);
             ParseResultAssert.IsFailure(actualResult);

@@ -36,5 +36,10 @@ namespace Synapse.Tests
         {
             Enqueue(result);
         }
+
+        public void Add(Func<MockSequenceParser<TToken, TResult>, IParseResult<TToken, TResult>> result)
+        {
+            Enqueue(result(this));
+        }
     }
 }

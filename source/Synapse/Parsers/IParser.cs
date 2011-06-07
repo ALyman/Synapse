@@ -20,11 +20,20 @@ using Synapse.Results;
 namespace Synapse.Parsers
 {
     /// <summary>
+    /// Represents an abstract parser.
+    /// </summary>
+    /// <typeparam name="TToken">The type of the token.</typeparam>
+    public interface IParser<TToken>
+    {
+
+    }
+
+    /// <summary>
     /// A generic parser that reads a token stream, and returns a result.
     /// </summary>
     /// <typeparam name="TToken">The type of the token.</typeparam>
     /// <typeparam name="TResult">The type of the result.</typeparam>
-    public interface IParser<TToken, out TResult>
+    public interface IParser<TToken, out TResult> : IParser<TToken>
     {
         /// <summary>
         /// Parses the specified input.

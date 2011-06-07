@@ -53,7 +53,8 @@ namespace Synapse.Tests.Results
         public void IfSuccess_called_on_a_failed_result()
         {
             var firstInput = new MockInput<int>();
-            var originalResult = ParseResult.Failure<int, double>(firstInput);
+            var mockParser = new MockFailureParser<int, double>();
+            var originalResult = ParseResult.Failure<int, double>(firstInput, mockParser);
             var actualResult = originalResult.IfSuccess(
                 successfulResult =>
                     {
@@ -72,7 +73,8 @@ namespace Synapse.Tests.Results
             var firstInput = new MockInput<int>();
             var remainingInput = new MockInput<int>();
             var expectedResult = new MockParseResult<int, double>();
-            var originalResult = ParseResult.Failure<int, double>(firstInput);
+            var mockParser = new MockFailureParser<int, double>();
+            var originalResult = ParseResult.Failure<int, double>(firstInput, mockParser);
             var actualResult = originalResult.IfFailure(
                 successfulResult =>
                     {
@@ -106,7 +108,8 @@ namespace Synapse.Tests.Results
         {
             var firstInput = new MockInput<int>();
             var remainingInput = new MockInput<int>();
-            var originalResult = ParseResult.Failure<int, double>(firstInput);
+            var mockParser = new MockFailureParser<int, double>();
+            var originalResult = ParseResult.Failure<int, double>(firstInput, mockParser);
             var actualResult = originalResult.Cast<int, double, decimal>();
             Assert.AreEqual(originalResult.FirstInput, actualResult.FirstInput);
             Assert.AreEqual(originalResult.RemainingInput, actualResult.RemainingInput);

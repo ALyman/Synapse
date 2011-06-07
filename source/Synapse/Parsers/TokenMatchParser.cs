@@ -27,7 +27,11 @@ namespace Synapse.Parsers
     public class TokenMatchParser<TToken> : IParser<TToken, TToken>
     {
         private readonly IEqualityComparer<TToken> comparer;
-        private readonly TToken token;
+
+        /// <summary>
+        /// Gets the token.
+        /// </summary>
+        public TToken Token { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TokenMatchParser&lt;TToken&gt;"/> class.
@@ -44,7 +48,7 @@ namespace Synapse.Parsers
         /// <param name="comparer">The comparer.</param>
         public TokenMatchParser(TToken token, IEqualityComparer<TToken> comparer)
         {
-            this.token = token;
+            this.Token = token;
             this.comparer = comparer;
         }
 
@@ -58,11 +62,11 @@ namespace Synapse.Parsers
         public IParseResult<TToken, TToken> Parse(IInput<TToken> input)
         {
             if (input.EndOfInput)
-                return ParseResult.UnexpectedEndOfInput(input, this.token);
-            else if (this.comparer.Equals(input.Current, this.token))
+                return ParseResult.Failure(input, this);
+            else if (this.comparer.Equals(input.Current, this.Token))
                 return ParseResult.Success(input, input.MoveNext(), input.Current);
             else
-                return ParseResult.UnexpectedTokenFailure(input, this.token);
+                return ParseResult.Failure(input, this);
         }
 
         #endregion

@@ -41,7 +41,7 @@ namespace Synapse.Tests.Parsers
                 minimumCount: 1,
                 parser: new MockSequenceParser<int, int>
                             {
-                                ParseResult.Failure<int, int>(input)
+                                p => ParseResult.Failure<int, int>(input, p)
                             }
                 );
             var actualResult = parser.Parse(input);
@@ -56,12 +56,12 @@ namespace Synapse.Tests.Parsers
                 minimumCount: 0,
                 parser: new MockSequenceParser<int, int>
                             {
-                                ParseResult.Failure<int, int>(input)
+                                p => ParseResult.Failure<int, int>(input, p)
                             }
                 );
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            CollectionAssert.AreElementsEqual(new int[] {}, actualCollection);
+            CollectionAssert.AreElementsEqual(new int[] { }, actualCollection);
         }
 
         [Test]
@@ -71,13 +71,13 @@ namespace Synapse.Tests.Parsers
             var parser = new RepetitionParser<int, int>(
                 new MockSequenceParser<int, int>
                     {
-                        ParseResult.Success(input, input, 1),
-                        ParseResult.Failure<int, int>(input)
+                        p => ParseResult.Success(input, input, 1),
+                        p => ParseResult.Failure<int, int>(input, p)
                     }
                 );
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            CollectionAssert.AreElementsEqual(new[] {1}, actualCollection);
+            CollectionAssert.AreElementsEqual(new[] { 1 }, actualCollection);
         }
 
         [Test]
@@ -89,12 +89,12 @@ namespace Synapse.Tests.Parsers
                     {
                         ParseResult.Success(input, input, 1),
                         ParseResult.Success(input, input, 2),
-                        ParseResult.Failure<int, int>(input)
+                        p => ParseResult.Failure<int, int>(input, p)
                     }
                 );
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            CollectionAssert.AreElementsEqual(new[] {1, 2}, actualCollection);
+            CollectionAssert.AreElementsEqual(new[] { 1, 2 }, actualCollection);
         }
 
         [Test]
@@ -107,12 +107,12 @@ namespace Synapse.Tests.Parsers
                         ParseResult.Success(input, input, 1),
                         ParseResult.Success(input, input, 2),
                         ParseResult.Success(input, input, 3),
-                        ParseResult.Failure<int, int>(input)
+                        p => ParseResult.Failure<int, int>(input, p)
                     }
                 );
             var actualResult = parser.Parse(input);
             var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            CollectionAssert.AreElementsEqual(new[] {1, 2, 3}, actualCollection);
+            CollectionAssert.AreElementsEqual(new[] { 1, 2, 3 }, actualCollection);
         }
 
         [Test]
@@ -126,45 +126,7 @@ namespace Synapse.Tests.Parsers
                                 ParseResult.Success(input, input, 1),
                                 ParseResult.Success(input, input, 2),
                                 ParseResult.Success(input, input, 3),
-                                ParseResult.Failure<int, int>(input)
-                            }
-                );
-            var actualResult = parser.Parse(input);
-            ParseResultAssert.IsFailure(actualResult);
-        }
-
-        [Test]
-        public void When_three_items_match_but_only_wanted_two()
-        {
-            var input = new MockInput<int>();
-            var parser = new RepetitionParser<int, int>(
-                maximumCount: 2,
-                parser: new MockSequenceParser<int, int>
-                            {
-                                ParseResult.Success(input, input, 1),
-                                ParseResult.Success(input, input, 2),
-                                ParseResult.Success(input, input, 3),
-                                ParseResult.Failure<int, int>(input)
-                            }
-                );
-            var actualResult = parser.Parse(input);
-            var actualCollection = ParseResultAssert.IsSuccess(actualResult);
-            CollectionAssert.AreElementsEqual(new[] {1, 2}, actualCollection);
-        }
-
-        [Test]
-        public void When_three_items_match_but_only_wanted_two_greedy()
-        {
-            var input = new MockInput<int>();
-            var parser = new RepetitionParser<int, int>(
-                maximumCount: 2,
-                greedy: true,
-                parser: new MockSequenceParser<int, int>
-                            {
-                                ParseResult.Success(input, input, 1),
-                                ParseResult.Success(input, input, 2),
-                                ParseResult.Success(input, input, 3),
-                                ParseResult.Failure<int, int>(input)
+                                p => ParseResult.Failure<int, int>(input, p)
                             }
                 );
             var actualResult = parser.Parse(input);

@@ -13,14 +13,19 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Synapse.Input;
+using Synapse.Parsers;
 
 namespace Synapse.Results
 {
     internal class FailureParseResult<TToken, TResult> : IFailureParseResult<TToken, TResult>
     {
-        public FailureParseResult(IInput<TToken> firstInput)
+        public FailureParseResult(IInput<TToken> firstInput, IEnumerable<IParser<TToken>> failedParsers)
         {
+            this.FailedParsers = failedParsers.ToList().AsReadOnly();
             FirstInput = firstInput;
             RemainingInput = firstInput;
         }
@@ -29,6 +34,7 @@ namespace Synapse.Results
 
         public IInput<TToken> FirstInput { get; private set; }
         public IInput<TToken> RemainingInput { get; private set; }
+        public ReadOnlyCollection<IParser<TToken>> FailedParsers { get; private set; }
 
         #endregion
     }

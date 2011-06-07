@@ -13,7 +13,20 @@
 #endregion
 
 using System;
-using MbUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
+#if TEST_MBUNIT
+using TestFixtureAttribute =  MbUnit.Framework.TestFixtureAttribute;
+using TestAttribute =  MbUnit.Framework.TestAttribute;
+using Assert =  MbUnit.Framework.Assert;
+using CollectionAssert =  MbUnit.Framework.Assert;
+#else
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using CollectionAssert = Synapse.Tests.Utilities.CollectionAssert;
+#endif
+using Synapse.Parsers;
 using Synapse.Results;
 
 namespace Synapse.Tests
@@ -32,6 +45,47 @@ namespace Synapse.Tests
         {
             if (!(result is IFailureParseResult<TToken, TResult>))
                 Assert.Fail("ParseResultAssert.IsFailure failed: ParseResult was not a failure");
+        }
+
+        public static void IsFailure<TToken, TResult>(IParseResult<TToken, TResult> result, IEnumerable<TToken> expectedTokens)
+        {
+            var failureResult = result as IFailureParseResult<TToken, TResult>;
+            if (failureResult == null)
+                Assert.Fail("ParseResultAssert.IsFailure failed: ParseResult was not a failure");
+
+            var actualTokens = from p in failureResult.FailedParsers.OfType<TokenMatchParser<TToken>>()
+                               select p.Token;
+
+            var expectedTokenArray = expectedTokens.Distinct().ToArray();
+            var actualTokenArray = actualTokens.Distinct().ToArray();
+
+            Array.Sort(expectedTokenArray);
+            Array.Sort(actualTokenArray);
+
+            if (!expectedTokenArray.SequenceEqual(actualTokenArray))
+            {
+                Assert.Fail(
+                    string.Format(
+                        "Expected Tokens did not match: Expected {{{0}}}, but got {{{1}}}",
+                        string.Join(", ", expectedTokenArray),
+                        string.Join(", ", actualTokenArray)
+                    )
+                );
+            }
+        }
+
+        [Obsolete]
+        public static void IsUnexpectedTokenFailure<TToken, TResult>(IParseResult<TToken, TResult> result, TToken expectedToken, TToken actualToken)
+        {
+            var failureResult = result as IFailureParseResult<TToken, TResult>;
+            if (failureResult == null)
+            {
+                Assert.Fail("ParseResultAssert.IsFailure failed: ParseResult was not a failure");
+                return;
+            }
+
+            Assert.AreEqual(actualToken, failureResult.FirstInput.Current);
+            Assert.AreEqual(actualToken, failureResult.FirstInput.Current);
         }
 
         public static void AreEqual<TToken, TResult>(TResult expected, IParseResult<TToken, TResult> result)

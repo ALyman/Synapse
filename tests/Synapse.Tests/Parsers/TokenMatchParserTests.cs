@@ -35,7 +35,7 @@ namespace Synapse.Tests.Parsers
         [Test]
         public void When_the_token_matches()
         {
-            var input = new[] {1}.AsInput();
+            var input = new[] { 1 }.AsInput();
             var parser = new TokenMatchParser<int>(1);
             var result = parser.Parse(input);
             ParseResultAssert.IsSuccess(result);
@@ -45,10 +45,10 @@ namespace Synapse.Tests.Parsers
         [Test]
         public void When_the_token_doesnt_match()
         {
-            var input = new[] {1}.AsInput();
+            var input = new[] { 1 }.AsInput();
             var parser = new TokenMatchParser<int>(2);
             var result = parser.Parse(input);
-            ParseResultAssert.IsFailure(result);
+            ParseResultAssert.IsFailure(result, new[] { 2 });
         }
 
         [Test]

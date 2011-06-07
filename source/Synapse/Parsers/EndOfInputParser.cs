@@ -40,7 +40,7 @@ namespace Synapse.Parsers
             }
             else
             {
-                return ParseResult.UnexpectedTokenFailure(input);
+                return ParseResult.Failure(input, this);
             }
         }
 

@@ -25,7 +25,7 @@ namespace Synapse.Tests
 
         public IParseResult<TToken, TResult> Parse(IInput<TToken> input)
         {
-            return ParseResult.Failure<TToken, TResult>(input);
+            return ParseResult.Failure(input, this);
         }
 
         #endregion

@@ -127,16 +127,13 @@ namespace Synapse
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="parser">The parser.</param>
         /// <param name="minimumCount">The minimum count.</param>
-        /// <param name="maximumCount">The maximum count.</param>
-        /// <param name="greedy">if set to <c>true</c>, then we will read as many as possible, then check the range; otherwise, we will stop reading at the maximum count.</param>
         /// <returns>
         /// The parser.
         /// </returns>
         public static IParser<TToken, IEnumerable<TResult>> Repeat<TToken, TResult>(
-            this IParser<TToken, TResult> parser, int minimumCount = 0, int maximumCount = Int32.MaxValue,
-            bool greedy = true)
+            this IParser<TToken, TResult> parser, int minimumCount = 0)
         {
-            return new RepetitionParser<TToken, TResult>(parser, minimumCount, maximumCount, greedy);
+            return new RepetitionParser<TToken, TResult>(parser, minimumCount);
         }
 
         /// <summary>

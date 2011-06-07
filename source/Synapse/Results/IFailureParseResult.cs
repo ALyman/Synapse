@@ -13,6 +13,8 @@
 #endregion
 
 using System;
+using System.Collections.ObjectModel;
+using Synapse.Parsers;
 
 namespace Synapse.Results
 {
@@ -21,7 +23,11 @@ namespace Synapse.Results
     /// </summary>
     /// <typeparam name="TToken">The type of the token.</typeparam>
     /// <typeparam name="TResult">The type of the result.</typeparam>
-    public interface IFailureParseResult<out TToken, out TResult> : IParseResult<TToken, TResult>
+    public interface IFailureParseResult<TToken, out TResult> : IParseResult<TToken, TResult>
     {
+        /// <summary>
+        /// Gets the failed parsers.
+        /// </summary>
+        ReadOnlyCollection<IParser<TToken>> FailedParsers { get; }
     }
 }
